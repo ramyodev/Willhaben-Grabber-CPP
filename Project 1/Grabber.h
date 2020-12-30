@@ -2,6 +2,8 @@
 #include <iostream>
 #include <array>
 #include <vector>
+#include <unordered_map>
+#include <string>
 
 class Grabber
 {
@@ -40,6 +42,29 @@ public:
 			"19. Haus / Garten / Werkstatt",
 			"20. To give away Free"
 		};
+		to_filter_url['+'] = "%2B";
+		to_filter_url['+'] = "%2B";
+		to_filter_url[' '] = "+";
+		to_filter_url['ö'] = "%F6";
+		to_filter_url['ü'] = "%FC";
+		to_filter_url['ä'] = "%E4";
+		to_filter_url['Ö'] = "%D6";
+		to_filter_url['Ü'] = "%DC";
+		to_filter_url['Ä'] = "%C4";
+		to_filter_url['×'] = "%D7";
+		to_filter_url['#'] = "%23";
+		to_filter_url['!'] = "%21";
+		to_filter_url['/'] = "%2F";
+		to_filter_url[','] = "%2C";
+		to_filter_url['€'] = "%80";
+		to_filter_url['%'] = "%25";
+		to_filter_url['='] = "%3D";
+		to_filter_url['('] = "%28";
+		to_filter_url[')'] = "%29";
+		to_filter_url['&'] = "%26";
+		to_filter_url[';'] = "%3B";
+		to_filter_url[':'] = "%3A";
+
 	}
 	void Marktplatz() {
 		while (true) {
@@ -62,23 +87,49 @@ public:
 						}
 						else
 						{
-
+							
 						}
 					}
 				}
 			}
 			else if (mp_first_under == "n" || mp_first_under == "N") {
-
+				std::string uk = "";
+				build_willhaben_url(uk);
+				break;
+			}
+			else
+			{
+				std::cout << "--------------------\nInvalid selection!\n--------------------";
 			}
 
 		}
 	}
 
 	std::string build_willhaben_url(std::string uk) {
-		std::string keyword;
+		std::string keyword_input;
 		std::cout << "Select keyword:" << std::endl;
-		std::cin >> keyword;
+		std::cin.clear();
+		std::getline(std::cin, keyword_input);
+		std::string keyword;
 
+
+		for (char& cat : keyword_input) {
+			if (to_filter_url.find(cat) != to_filter_url.end()) {
+				keyword += to_filter_url[cat];
+			} 
+			else {
+				keyword += cat;
+			}
+		}
+
+		std::cout << keyword << std::endl;
+
+		int typ;
+		std::cout << "By whom should products be grabbed?\n0 - Private dealers\n1 - Business Dealers\n2 - Both\n" << std::endl;
+		std::cin >> typ;
+
+		std::string url;
+		return url;
 	}
 
 private:
@@ -87,4 +138,5 @@ private:
 	std::array<std::string, 21> menu_printed;
 	std::vector<std::string> links_with_products;
 	std::array<std::string, 3> types_of_vendor = { "&ISPRIVATE = 1", "&ISPRIVATE=0", "" };
+	std::unordered_map<char, std::string> to_filter_url;
 };
